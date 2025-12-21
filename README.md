@@ -7,6 +7,7 @@ Analyze airline arrival delays to identify key causes, frequency vs impact, and 
 - Python
 - pandas, numpy
 - matplotlib, seaborn
+- Power BI
 
 ## Dataset
 US airline arrival delay data (December 2020) containing flight counts and delay causes across airports and carriers.
@@ -20,13 +21,26 @@ US airline arrival delay data (December 2020) containing flight counts and delay
 - Carrier and airport-level delay comparison
 
 ## Key Insights
-- Late aircraft delays contribute the highest total delay minutes.
-- Carrier-related delays are the most frequent.
-- Weather delays have lower overall impact than operational delays.
+- Carrier-related delays contribute the highest total delay impact.
+- Late aircraft delays are the second-largest contributor.
+- Weather delays have lower overall impact compared to operational causes.
 - Normalizing delay by flight count provides more meaningful insights.
 
+## 📊 Power BI Dashboard
+This project includes an interactive Power BI dashboard analyzing airline arrival delays and their root causes.
+
+### Dashboard Highlights
+- Breakdown of total delay impact by cause
+- Delay percentage contribution by category
+- Top airports and carriers by delay minutes
+- Key KPIs summarizing overall delay impact
+
+📁 **Files included**
+- `Dashboard.pbix`
+- `Dashboard_Screenshot.png`
+
 ## Limitations
-- Dataset contains data for a single month (December 2020), limiting seasonal analysis.
+- Dataset contains data for a single month (December 2020), limiting seasonal trend analysis.
 
 ## Conclusion
 Improving aircraft turnaround efficiency and carrier operations could significantly reduce airline arrival delays.
