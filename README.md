@@ -53,11 +53,13 @@ To optimize aggregation performance and prevent data distortion, the dataset was
 
 ## 📁 Repository Structure
 
-├── dataset.csv                   # Raw flight delay dataset
-├── eda.ipynb                     # Python exploratory data analysis (EDA)
-├── Dashboard.pbix                # Power BI Dashboard file
-├── Dashboard_Screenshot.png      # Final dashboard visual screenshot
-└── README.md                     # Project documentation
+```text
+├── dataset.csv
+├── eda.ipynb
+├── Dashboard.pbix
+├── Dashboard_screenshot.png
+└── README.md
+```
 
 ---
 
