@@ -1,46 +1,70 @@
-# Airline Delay Analysis (EDA)
+# Flight Delay Analysis – Root Cause & Impact Dashboard
 
-## Objective
-Analyze airline arrival delays to identify key causes, frequency vs impact, and operational insights using Python.
+## 📌 Project Overview
+An end-to-end data analysis and business intelligence project analyzing US airline arrival delays (December 2020). This project identifies the primary operational drivers behind flight delays, compares flight delay frequency against total delay duration, and visualizes carrier and airport-level performance.
 
-## Tools Used
-- Python
-- pandas, numpy
-- matplotlib, seaborn
-- Power BI
+---
 
-## Dataset
-US airline arrival delay data (December 2020) containing flight counts and delay causes across airports and carriers.
+## 🛠️ Tech Stack & Tools
+- **Data Modeling & Visualization:** Power BI Desktop, DAX, Power Query
+- **Data Processing & EDA:** Python (`pandas`, `numpy`), Matplotlib, Seaborn
+- **Architecture:** Star Schema Data Model
 
-## Analysis Performed
-- Data cleaning and missing value analysis
-- Distribution analysis of arrival delays
-- Delay cause analysis (carrier, weather, NAS, late aircraft, security)
-- Frequency vs total delay impact comparison
-- Normalized delay per flight analysis
-- Carrier and airport-level delay comparison
+---
 
-## Key Insights
-- Carrier-related delays contribute the highest total delay impact.
-- Late aircraft delays are the second-largest contributor.
-- Weather delays have lower overall impact compared to operational causes.
-- Normalizing delay by flight count provides more meaningful insights.
+## 🏗️ Data Model Architecture (Star Schema)
+To optimize aggregation performance and prevent data distortion, the dataset was transformed from a denormalized flat structure into a multi-fact **Star Schema**:
 
-## 📊 Power BI Dashboard
-This project includes an interactive Power BI dashboard analyzing airline arrival delays and their root causes.
+- **Dimension Tables:**
+  - `Dim_Carrier`: Unique carrier identifiers and airline names (1:Many relationship to Fact tables).
+  - `Dim_Airport`: Unique airport codes and names (1:Many relationship to Fact tables).
+- **Fact Tables:**
+  - `FactDelays`: Flight-level metrics including total flights (`arr_flights`), delayed flight occurrences (`arr_del15`), and total delay duration (`arr_delay`).
+  - `FactDelaysCause`: Unpivoted delay causes and corresponding delay minutes to enable category-level filtering.
 
-### Dashboard Highlights
-- Breakdown of total delay impact by cause
-- Delay percentage contribution by category
-- Top airports and carriers by delay minutes
-- Key KPIs summarizing overall delay impact
+---
 
-📁 **Files included**
-- `Dashboard.pbix`
-- `Dashboard_Screenshot.png`
+## 🔄 Dashboard Refinement & Iteration (v1 vs. v2)
 
-## Limitations
-- Dataset contains data for a single month (December 2020), limiting seasonal trend analysis.
+### Limitations of Version 1 (Flat Model)
+- **Granularity Conflicts:** Using a single flat table led to aggregation errors when calculating delay causes alongside flight volumes.
+- **Metric Confusion:** Delayed flight count (`arr_del15` = 144) was initially conflated with total delay time (`arr_delay` = 9,060 minutes).
+- **Redundant Duplication:** Repeated carrier and airport strings across thousands of rows increased memory overhead and risked double-counting.
 
-## Conclusion
-Improving aircraft turnaround efficiency and carrier operations could significantly reduce airline arrival delays.
+### What Was Refined in Version 2
+- **Schema Separation:** Decoupled dimensions (`Dim_Carrier`, `Dim_Airport`) from fact measures to ensure strict 1-to-many relationship cardinality.
+- **Explicit DAX Calculations:** Replaced implicit visual aggregations with robust DAX measures to isolate count versus duration:
+  - `Delayed Flights Count = SUM(FactDelays[arr_del15])`
+  - `Total Delay Minutes = SUM(FactDelays[arr_delay])`
+  - `Average Delay per Cause = DIVIDE(AVERAGE(FactDelays[arr_del15]), 5, 0)`
+- **Visual & UX Clarity:** 
+  - Standardized KPI cards to distinctly separate flight volumes, delayed flight counts, and average impact per cause.
+  - Formatted Donut Chart labels to display clear percentage shares (`46.6%`, `21.9%`) for readability.
+  - Adjusted dimensional axes to prevent category truncation across top-impact airports.
+
+---
+
+## 📊 Key Business Insights
+- **Carrier Operations Drive the Majority of Delays:** Carrier-related delays account for **~46.6%** (4.2K minutes) of total delay duration, followed by Late Aircraft delays at **~21.9%** (2.0K minutes).
+- **Operational vs. External Causes:** Internal operational inefficiencies (Carrier + Late Aircraft) account for nearly **70%** of all delay time, whereas weather contributes only **~10.5%**.
+- **Airport Bottlenecks:** Delays are concentrated heavily in specific regional hubs (e.g., Albuquerque, Allentown), highlighting regional turnaround bottlenecks.
+
+---
+
+## 📁 Repository Structure
+
+├── dataset.csv/                # dataset
+├── eda.ipynb/                  # Python exploratory data analysis (EDA)
+├── Dashboard/                  # Power BI Dashboard file (.pbix)
+├── Dashboard_screenshot/       # Dashboard screenshots and model diagrams
+└── README.md
+
+---
+
+## ⚠️ Limitations
+- **Time Scope:** The dataset is restricted to December 2020, capturing holiday-season travel patterns but limiting year-round seasonal trend analysis.
+
+---
+
+## 💡 Conclusion & Recommendations
+Mitigating airline delays requires targeted operational interventions in aircraft turnaround management and carrier scheduling rather than weather mitigation alone.
